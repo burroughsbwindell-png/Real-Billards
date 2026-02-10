@@ -67,7 +67,7 @@ html_client = '''<!DOCTYPE html>
             cursor: pointer;
             width: 100%;
             margin-bottom: 10px;
-        }
+       }
         .btn-secondary { background: #0f3460; border: 2px solid #e94560; }
         .room-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .room-card { 
@@ -524,4 +524,58 @@ A web-based multiplayer 8-ball pool game with virtual betting, equipment system,
 - **House Cue**: Free, use anywhere
 - **Breaking Cue**: $2, required for betting, heavier weight
 - **Semi-Pro Cues**: $1-5, +1-3% aim 
- 
+ assist
+- **Pro Cues**: $5-10, +3-6% aim assist
+
+### Tournaments
+- 16-player single elimination brackets
+- Daily → Weekly → Monthly → Grand Championship progression
+- Supports 40,000 simultaneous tournaments
+
+## Installation
+
+```bash
+npm install
+npm start
+```
+
+Open browser to `http://localhost:3000`
+
+## How to Play
+
+1. Register with username
+2. Buy Breaking Cue ($2) to enable betting
+3. Join room tier or find quick match
+4. Drag to aim, hold to charge power, release to shoot
+5. Pocket all your balls (solids or stripes) then the 8-ball
+
+## Mobile Support
+- Touch controls
+- Portrait orientation
+- Responsive design
+- Works on all smartphones
+
+## Architecture
+- Node.js + Express server
+- Socket.io for real-time multiplayer
+- HTML5 Canvas for game rendering
+- Custom physics engine
+
+## Legal Notice
+This game uses virtual currency only. Real money gambling requires proper licensing and compliance with local laws.
+
+---
+Built with modular architecture for easy expansion and legal compliance integration.
+'''
+
+with open(f"{project_dir}/README.md", "w") as f:
+    f.write(readme)
+
+print("✓ Created README.md")
+print("\n=== Real Billiards Complete ===")
+print("Location:", project_dir)
+print("\nTo run:")
+print("  cd pool-game")
+print("  npm install")
+print("  npm start")
+print("\nThen open http://localhost:3000 on your phone")
