@@ -1,0 +1,8 @@
+{
+  "name": "real-billiards",
+  "version": "1.0.0",
+  "description": "Real Billiards - Play a game without having to play games",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+ 
