@@ -114,6 +114,127 @@ html_client = '''<!DOCTYPE html>
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between
-          
+  ;
+            align-items: center;
+        }
+        .cue-item.owned { border-color: #00ff00; }
+        .cue-item.selected { border-color: #e94560; }
+        .cue-price { color: #ffd700; font-weight: bold; }
+        #notification { 
+            position: fixed; 
+            top: 80px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: #e94560; 
+            padding: 15px 30px; 
+            border-radius: 25px;
+            display: none;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="logo">🎱 Real Billiards</div>
+        <div id="balance">$100</div>
+    </div>
+    
+    <div id="mainMenu">
+        <div class="section">
+            <div class="section-title">Quick Play</div>
+            <button class="btn" onclick="findMatch()">Find Match</button>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Room Tiers</div>
+            <div class="room-grid">
+                <div class="room-card" onclick="joinTier('amateur')">
+                    <div class="room-tier">🏠 Amateur</div>
+                    <div class="room-bet">$1 - $5</div>
+                    <div>Free House Cue</div>
+                </div>
+                <div class="room-card" onclick="joinTier('semiPro')">
+                    <div class="room-tier">⭐ Semi-Pro</div>
+                    <div class="room-bet">$5 - $20</div>
+                    <div>Breaking Cue Required</div>
+                </div>
+                <div class="room-card" onclick="joinTier('pro')">
+                    <div class="room-tier">🏆 Pro</div>
+                    <div class="room-bet">$20 - $100</div>
+                    <div>Pro Cue + Breaking Required</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Equipment</div>
+            <button class="btn btn-secondary" onclick="showShop()">Cue Shop</button>
+        </div>
+    </div>
+    
+    <div id="gameCanvas">
+        <canvas id="canvas"></canvas>
+        <div id="powerMeter"><div id="powerFill"></div></div>
+    </div>
+    
+    <div id="shopModal">
+        <div class="modal-header">
+            <h2>Cue Shop</h2>
+            <button class="close-btn" onclick="closeShop()">Close</button>
+        </div>
+        <div id="shopList"></div>
+    </div>
+    
+    <div id="notification"></div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let player = { balance: 100, inventory: ['house'], activeCue: 'house' };
+        let gameState = { balls: [], cueBall: null, aimAngle: 0, power: 0, charging: false };
+        let canvas, ctx;
+        
+        const CUES = {
+            house: { name: 'House Cue', price: 0, aimAssist: 0, weight: 18 },
+            breaking: { name: 'Breaking Cue', price: 2, aimAssist: 0, weight: 21 },
+            sp1: { name: 'Starter Cue', price: 1, aimAssist: 0.01, weight: 19 },
+            sp2: { name: 'Apprentice Cue', price: 2, aimAssist: 0.015, weight: 19 },
+            sp3: { name: 'Club Cue', price: 3, aimAssist: 0.02, weight: 19.5 },
+            sp4: { name: 'League Cue', price: 4, aimAssist: 0.025, weight: 19.5 },
+            sp5: { name: 'Challenger Cue', price: 5, aimAssist: 0.03, weight: 20 },
+            pro5: { name: 'Professional Cue', price: 5, aimAssist: 0.03, weight: 20 },
+            pro6: { name: 'Elite Cue', price: 6, aimAssist: 0.035, weight: 20 },
+            pro7: { name: 'Master Cue', price: 7, aimAssist: 0.04, weight: 20.5 },
+            pro8: { name: 'Champion Cue', price: 8, aimAssist: 0.045, weight: 20.5 },
+            pro9: { name: 'Grandmaster Cue', price: 9, aimAssist: 0.05, weight: 21 },
+            pro10: { name: 'Legend Cue', price: 10, aimAssist: 0.06, weight: 21 }
+        };
+        
+        socket.on('registered', (data) => {
+            player = data.player;
+            updateUI();
+            showNotification('Welcome to Real Billiards!');
+        });
+        
+        socket.on('purchaseComplete', (data) => {
+            player.balance = data.newBalance;
+            player.inventory = data.inventory;
+            updateUI();
+            showNotification('Purchased: ' + data.cue.name);
+            showShop();
+        });
+        
+        socket.on('cueSelected', (data) => {
+            player.activeCue = data.cue.id;
+            showNotification('Equipped: ' + data.cue.name);
+            showShop();
+        });
+        
+        socket.on('matchFound', (data) => {
+            showNotification('Match found! Starting...');
+            setTimeout(() => startGame(), 1000);
+        });
+        
+        socket.on('error', (data) => showNotification(data.message));        
 
  
