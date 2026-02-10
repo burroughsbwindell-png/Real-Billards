@@ -13,6 +13,107 @@
   },
   "author": "Windell Burroughs",
   "license": "PROPRIETARY - Copyright 2025 Windell"
+}  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["billiards", "pool", "multiplayer", "game"],
+  "author": "Real Billiards Team",
+  "license": "MIT"
 }
+'''
+
+with open(f"{project_dir}/package.json", "w") as f:
+    f.write(package_json)
+
+print("✓ Created package.json")
+
+# Create a simplified HTML file for the client
+html_client = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Billiards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #1a1a2e; 
+            color: #fff; 
+            overflow: hidden;
+            height: 100vh;
+        }
+        #header { 
+            height: 60px; 
+            background: #0f3460; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 3px solid #e94560;
+        }
+        #logo { font-size: 24px; font-weight: bold; color: #e94560; }
+        #balance { background: #16213e; padding: 10px 20px; border-radius: 20px; color: #ffd700; }
+        #mainMenu { padding: 20px; overflow-y: auto; height: calc(100vh - 60px); }
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 18px; color: #e94560; margin-bottom: 15px; text-transform: uppercase; }
+        .btn { 
+            background: #e94560; 
+            border: none; 
+            color: white; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-secondary { background: #0f3460; border: 2px solid #e94560; }
+        .room-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .room-card { 
+            background: #0f3460; 
+            border: 2px solid #e94560; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            cursor: pointer;
+        }
+        .room-tier { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        .room-bet { color: #ffd700; margin-bottom: 5px; }
+        #gameCanvas { display: none; position: relative; }
+        canvas { display: block; background: #0d5c3b; }
+        #powerMeter { 
+            position: absolute; 
+            bottom: 100px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 200px; 
+            height: 20px; 
+            background: #000; 
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
+        #powerFill { height: 100%; width: 0%; background: linear-gradient(90deg, yellow, red); border-radius: 8px; }
+        #shopModal, #tournamentModal { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-btn { background: #e94560; border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .cue-item { 
+            background: #0f3460; 
+            border: 2px solid #333; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between
+          
 
  
