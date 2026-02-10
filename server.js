@@ -1,4 +1,4 @@
-// Real Billiards Server - Copyright 2025 Wendell
+// Real Billiards Server - Copyright 2025 Windell
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
